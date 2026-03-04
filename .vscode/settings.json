@@ -1,0 +1,7 @@
+{
+    "dotnetAcquisitionExtension.allowInvalidPaths": false,
+    "dotnet.unitTests.runSettingsPath": "",
+    "omnisharp.sdkPath": "/home/philiphumblekelsin27/.dotnet",
+    "dotnetAcquisitionExtension.sharedExistingDotnetPath": "",
+    "dotnetAcquisitionExtension.existingDotnetPath": []
+}
