@@ -1,20 +1,18 @@
 using System;
 
+// CREATIVITY REPORT:
+// I exceeded requirements by adding a 'Mood Tracker' to each entry. 
+// When the user writes an entry, they are prompted to record their mood (1-10 or a word).
+// This data is saved to the file and displayed along with the prompt and response.
+
 class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello World! This is the Journal Project.");
-
         Journal theJournal = new Journal();
-        PromptGenerator promptGenerator = new PromptGenerator();
-
-        promptGenerator._prompts.Add("What was the best part of your day?");
-
+        PromptGenerator promptGen = new PromptGenerator();
         int choice = -1;
-
         Console.WriteLine("Welcome to the Journal Program!");
-
         while (choice != 5)
         {
             Console.WriteLine("\nPlease select one of the following choices:");
@@ -24,28 +22,45 @@ class Program
             Console.WriteLine("4. Save");
             Console.WriteLine("5. Quit");
             Console.Write("What would you like to do? ");
-
-            choice = int.Parse(Console.ReadLine());
-
+            string input = Console.ReadLine();
+            if (!int.TryParse(input, out choice))
+            {
+                Console.WriteLine("Please enter a number between 1 and 5.");
+                continue;
+            }
             if (choice == 1)
             {
-                string prompt = promptGenerator.GetRandomPrompt();
-                Console.WriteLine(prompt);
+                string prompt = promptGen.GetRandomPrompt();
+                Console.WriteLine($"\n{prompt}");
                 Console.Write("> ");
                 string response = Console.ReadLine();
-
+                Console.Write("How are you feeling today? (Scale 1-10 or description): ");
+                string mood = Console.ReadLine();
                 Entry newEntry = new Entry();
                 newEntry._date = DateTime.Now.ToShortDateString();
                 newEntry._promptText = prompt;
                 newEntry._entryText = response;
+                newEntry._mood = mood;
                 theJournal.AddEntry(newEntry);
             }
             else if (choice == 2)
             {
                 theJournal.DisplayAll();
             }
-
+            else if (choice == 3)
+            {
+                Console.Write("What is the filename? ");
+                string filename = Console.ReadLine();
+                theJournal.LoadFromFile(filename);
+            }
+            else if (choice == 4)
+            {
+                Console.Write("What is the filename? ");
+                string filename = Console.ReadLine();
+                theJournal.SaveToFile(filename);
+            }
         }
-    }
 
+        Console.WriteLine("Goodbye!");
+    }
 }
