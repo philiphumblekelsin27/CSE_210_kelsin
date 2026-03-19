@@ -9,28 +9,43 @@ public class Scripture
     public Scripture(Reference reference, string text)
     {
         _reference = reference;
-        string[] wordArray = text.Split(' ');
-
-        foreach (string word in wordArray)
+        string[] splitWords = text.Split(' ');
+        foreach (string wordText in splitWords)
         {
-            _words.Add(new Word(word));
+            _words.Add(new Word(wordText));
         }
     }
 
     public void HideRandomWords(int numberToHide)
     {
         Random random = new Random();
-        int hiddenCount = 0;
-
-        while (hiddenCount < numberToHide && !IsCompletelyHidden())
+        List<int> visibleIndices = new List<int>();
+        for (int i = 0; i < _words.Count; i++)
         {
-            int index = random.Next(_words.Count);
-            if (!_words[index].IsHidden())
+            if (!_words[i].IsHidden())
             {
-                _words[index].Hide();
-                hiddenCount++;
+                visibleIndices.Add(i);
             }
         }
+        int actualToHide = Math.Min(numberToHide, visibleIndices.Count);
+        for (int i = 0; i < actualToHide; i++)
+        {
+            int randomIndex = random.Next(visibleIndices.Count);
+            int wordIndex = visibleIndices[randomIndex];
+
+            _words[wordIndex].Hide();
+            visibleIndices.RemoveAt(randomIndex);
+        }
+    }
+
+    public string GetDisplayText()
+    {
+        string text = _reference.GetDisplayText() + " ";
+        foreach (Word word in _words)
+        {
+            text += word.GetDisplayText() + " ";
+        }
+        return text.Trim();
     }
 
     public bool IsCompletelyHidden()
@@ -43,15 +58,5 @@ public class Scripture
             }
         }
         return true;
-    }
-
-    public string GetDisplayText()
-    {
-        string displayText = _reference.GetDisplayText() + " ";
-        foreach (Word word in _words)
-        {
-            displayText += word.GetDisplayText() + " ";
-        }
-        return displayText.TrimEnd();
     }
 }
