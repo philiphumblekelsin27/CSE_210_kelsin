@@ -18,8 +18,6 @@ class Program
 
         foreach (Shape s in shapes)
         {
-            // Polymorphism in action: 
-            // The computer knows which GetArea() to call!
             string color = s.GetColor();
             double area = s.GetArea();
 
